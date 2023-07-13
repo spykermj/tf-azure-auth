@@ -10,7 +10,7 @@ locals {
 }
 
 resource "azuread_application" "this" {
-  display_name = "argocd-saml"
+  display_name = var.app_name
   owners       = [data.azuread_client_config.current.object_id]
   identifier_uris         = [local.issuer]
   sign_in_audience        = "AzureADMyOrg"
