@@ -4,6 +4,8 @@ resource "random_uuid" "ids" {
   count = length(var.app_roles)
 }
 
+resource "random_uuid" "permission_scope" {}
+
 resource "azuread_application" "this" {
   display_name            = var.app_name
   owners                  = concat([data.azuread_client_config.current.object_id], var.extra_owners)
@@ -31,6 +33,17 @@ resource "azuread_application" "this" {
       display_name         = app_role.value.display_name
       value                = app_role.value.value
       id                   = random_uuid.ids[app_role.key].id
+    }
+  }
+
+  api {
+    oauth2_permission_scope {
+      admin_consent_description  = "Allow the application to access ${var.app_name} on behalf of the signed-in user."
+      admin_consent_display_name = "Access"
+      id                         = random_uuid.permission_scope.result
+      type                       = "User"
+      enabled                    = true
+      value                      = "user"
     }
   }
 
