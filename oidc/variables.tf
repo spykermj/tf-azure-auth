@@ -12,6 +12,11 @@ variable "app_name" {
   type = string
 }
 
+variable "extra_owners" {
+  type    = list(string)
+  default = []
+}
+
 # https://learn.microsoft.com/en-us/graph/permissions-reference
 variable "graph_api_scopes" {
   description = "The list of graph api permissions needed by the application"

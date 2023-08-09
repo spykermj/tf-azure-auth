@@ -6,7 +6,7 @@ resource "random_uuid" "ids" {
 
 resource "azuread_application" "this" {
   display_name            = var.app_name
-  owners                  = [data.azuread_client_config.current.object_id]
+  owners                  = concat([data.azuread_client_config.current.object_id], var.extra_owners)
   sign_in_audience        = "AzureADMyOrg"
   prevent_duplicate_names = true
 
@@ -52,7 +52,7 @@ resource "azuread_application" "this" {
 
 resource "azuread_service_principal" "this" {
   application_id               = azuread_application.this.application_id
-  owners                       = [data.azuread_client_config.current.object_id]
+  owners                       = concat([data.azuread_client_config.current.object_id], var.extra_owners)
   app_role_assignment_required = true
 }
 
